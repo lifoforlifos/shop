@@ -6,7 +6,7 @@ export function login(credentials) {
                 res(response.data)
             })
             .catch((err) => {
-                rej('something went wrong')
+                rej(err)
             })
     })
 }

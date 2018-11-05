@@ -1,17 +1,16 @@
 <template>
     <b-form @submit.prevent="authenticate" @reset="onReset" class="form-center">
-      <h3>Login {{ authError }}</h3>
+      <h3>Login </h3>
+      <h6 class='text-danger'>{{ error }}</h6>
       <b-form-group label="Email address:" label-for="email">
-        <b-form-input id="email" v-model="form.email" type="email" required placeholder="Enter email">
+        <b-form-input id="email" v-model="form.email" type="email" placeholder="Enter email">
         </b-form-input>
-        <span class="text-danger" v-if="error.email">{{ error.email[0] }}</span>
       </b-form-group>
       <b-form-group label="Your Name:" label-for="password">
-        <b-form-input id="password" v-model="form.password" type="password" required placeholder="Enter password" :class="{is_valid :error.password}">
+        <b-form-input id="password" v-model="form.password" type="password" placeholder="Enter password" >
         </b-form-input>
-        <span class="text-danger" v-if="error.password">{{ error.password[0] }}</span>
       </b-form-group>
-      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button type="submit" variant="primary" :disabled="loading">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
 </template>
@@ -23,27 +22,21 @@ export default {
       form: {
         email: "",
         password: ""
-      },
-      error: ""
+      }
     };
   },
   computed: {
-    authError() {
+    error() {
       return this.$store.getters.authError;
+    },
+    loading() {
+      return this.$store.getters.loading;
     }
   },
   methods: {
     authenticate() {
       this.$store.dispatch("init");
-      login(this.$data.form)
-        .then(res => {
-          this.$store.commit("loginSuccess", res);
-          this.$router.push({ path: "/" });
-        })
-        .catch(error => {
-          console.log(error);
-          this.$store.commit("loginFailed", error);
-        });
+      this.$store.dispatch("login", this.$data.form);
     },
     onReset() {
       this.email = "";

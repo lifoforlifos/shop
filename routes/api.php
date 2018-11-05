@@ -9,7 +9,7 @@ Route::group([
     Route::post('register', 'UserController@register');
     Route::post('logout', 'UserController@logout');
     Route::post('refresh', 'UserController@refresh');
-    Route::post('me', 'UserController@me');
+    Route::get('/profile', 'UserController@profile');
 
 });
 
@@ -28,6 +28,15 @@ Route::get('/product/get/{category_slug?}', [
     'uses' => 'LandingPageController@shop'
 ]);
 
+Route::post('/wishlist/{id}', [
+    'uses' => 'UserController@wishlist',
+    'as' => 'user.wishlist'
+]);
+
+Route::get('/wishlists', [
+    'uses' => 'UserController@display_wishlist',
+    'as' => 'user.wishlist.get'
+]);
 
 Route::apiResources([
     'products' => 'ProductController',

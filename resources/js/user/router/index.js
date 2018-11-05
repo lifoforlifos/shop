@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import store from '../store/store'
 
 // views
-import Home from '../components/Home'
+import Home from '../components/home/Home'
 import Shop from '../components/store/Shop'
 import Single from '../components/store/Single'
 import Checkout from "../components/checkout/Checkout"

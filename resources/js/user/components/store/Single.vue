@@ -44,7 +44,6 @@
   <!-- ##### Single Product Details Area End ##### -->
 </template>
 <script>
-import axios from "axios";
 import { addItemToCart, countCart, loadCart } from "../../helpers/cart";
 export default {
   created() {
@@ -78,12 +77,29 @@ export default {
   methods: {
     addToCart(name, price, img, id) {
       this.$store.commit("addToCart", {
-        name: name,
-        price: price,
-        img: img,
-        id: id,
+        name,
+        price,
+        img,
+        id,
         count: 1
       });
+      this.$toaster.success("You have successfully added " + name);
+    },
+    wishlist(id) {
+      axios
+        .post("/api/wishlist/" + id, id, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.auth.currentUser.token}`
+          }
+        })
+        .then(res => {
+          this.$toaster.success(
+            "You have successfully added this item in your wishlist"
+          );
+        })
+        .catch(err => {
+          this.$toaster.error("This item is already in your wishlist");
+        });
     }
   }
 };

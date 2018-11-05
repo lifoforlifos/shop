@@ -7,7 +7,7 @@
                 <li v-for="(brand, index) in brands" :key="brand.id">
                     <div class="custom-control custom-radio">
                         <input type="radio" class="custom-control-input" :id="index" v-model="brand_name" @change="filter()"
-                            :value="brand.brand_name">
+                            :value="brand.brand_name" >
                         <label class="custom-control-label" :for="index">{{
                             brand.brand_name }}</label>
                     </div>
@@ -20,6 +20,7 @@
 <script>
 export default {
   name: "brands",
+
   computed: {
     brand_name: {
       get() {

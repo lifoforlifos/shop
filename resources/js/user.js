@@ -1,18 +1,22 @@
 import Vue from 'vue'
 import App from './user/App'
 import router from './user/router'
-
-// require styles
+import Toaster from 'v-toaster'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import BootstrapVue from 'bootstrap-vue'
+import store from './user/store/store'
+
+// require styles
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import store from './user/store/store'
+import 'v-toaster/dist/v-toaster.css'
 import 'swiper/dist/css/swiper.css'
 //auth
+require('./bootstrap')
 
 Vue.use(BootstrapVue);
 Vue.use(VueAwesomeSwiper)
+Vue.use(Toaster)
 
 new Vue({
     el: '#user',

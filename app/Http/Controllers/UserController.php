@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Auth;
+use App\User;
+use App\Order;
+use App\Product;
+use App\WishList;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -56,6 +59,13 @@ class UserController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+
+        if (!$token = auth('api')->attempt($data)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->respondWithToken($token);
+
     }
 
     /**
@@ -65,7 +75,7 @@ class UserController extends Controller
      */
     public function profile()
     {
-        $orders = Order::with('posts.images')
+        $orders = Order::with('products.images')
             ->where('user_id', auth('api')->user()->id)
             ->get();
 
@@ -93,7 +103,7 @@ class UserController extends Controller
 
     public function wishlist($id)
     {
-        $wishlist = Wishlist::where('post_id', $id)
+        $wishlist = Wishlist::where('product_id', $id)
             ->first();
         if (!empty($wishlist)) {
             return response()->json([
@@ -101,12 +111,23 @@ class UserController extends Controller
             ], 422);
         }
         $wishlist = new Wishlist();
-        $wishlist->post_id = $id;
+        $wishlist->product_id = $id;
         $wishlist->user_id = auth('api')->user()->id;
         $wishlist->save();
 
         return response()->json([
             'saved' => true
+        ], 200);
+    }
+
+    public function display_wishlist()
+    {
+        $wishlists = Product::with('images')->whereHas('wishlists', function ($query) {
+            $query->where('user_id', auth()->guard('api')->user()->id);
+        })->get();
+
+        return response()->json([
+            'wishlists' => $wishlists
         ], 200);
     }
 

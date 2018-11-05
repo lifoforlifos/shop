@@ -21,11 +21,15 @@
                         </div>
                         <!-- Favourite -->
                         <div class="product-favourite">
-                            <a class="favme fa fa-heart" @click="wishlist(product.id)"></a>
+                            <template v-if="product.wishlists.length > 0">
+                                <a class="favme fa fa-heart" :class="heartClass(product.wishlists[0].user_id)" @click="wishlist(product.id)"></a>
+                            </template>
+                            <template v-else>
+                                <a class="favme fa fa-heart"  @click="wishlist(product.id)"></a>
+                            </template>
                         </div>
                     </div>
                 </div>
-
                 <!-- Product Description -->
                 <div class="product-description">
                     <span>topshop</span>
@@ -48,11 +52,50 @@
 
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "products",
   computed: {
     products() {
       return this.$store.getters.products;
+    }
+  },
+  data() {
+    return {
+      wish_user_id: false
+    };
+  },
+  methods: {
+    addToCart(name, price, img, id) {
+      this.$store.commit("addToCart", {
+        name,
+        price,
+        img,
+        id,
+        count: 1
+      });
+    },
+    heartClass(wishlist_id) {
+      return {
+        active: wishlist_id === this.$store.state.auth.currentUser.id
+      };
+    },
+    wishlist(id) {
+      this.$store.state.auth.currentUser.token;
+      axios
+        .post("/api/wishlist/" + id, id, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.auth.currentUser.token}`
+          }
+        })
+        .then(res => {
+          this.$toaster.success(
+            "You have successfully added this item to your wishlist"
+          );
+        })
+        .catch(err => {
+          this.$toaster.error("This item is already in your wishlist");
+        });
     }
   }
 };
