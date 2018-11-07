@@ -3,7 +3,7 @@
     <b-carousel id="carousel1" style="text-shadow: 1px 1px 2px #333;" controls indicators background="#ababab"
         :interval="4000" img-width="1024" img-height="200">
         <!-- Text slides with image -->
-        <b-carousel-slide v-for="slider in sliders" :key="slider.id" :img-src="`https://immense-mesa-40058.herokuapp.com/storage/slider_image/${slider.file}`">
+        <b-carousel-slide v-for="slider in sliders" :key="slider.id" :img-src="`/storage/slider_image/${slider.file}`">
             <router-link :to="`/shop/${slider.category_slug}`">
                 <div class="slider-content">
                     <h5>{{ slider.headline }}</h5>
@@ -18,13 +18,12 @@
 </template>
 
 <script>
-    export default {
-        name: "carousel",
-        computed: {
-            sliders() {
-                return this.$store.getters.sliders
-            }
-        }
-    };
-
+export default {
+  name: "carousel",
+  computed: {
+    sliders() {
+      return this.$store.getters.sliders;
+    }
+  }
+};
 </script>

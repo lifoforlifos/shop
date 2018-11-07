@@ -26,8 +26,12 @@ export default {
         }
     },
     mutations: {
-        loadingState(state, payload) {
+        loadingState(state) {
             state.loading = true
+        },
+        initCheckout(state) {
+            state.error_coupon = ""
+            state.errors = ""
         },
         couponSuccess(state, payload) {
             state.loading = false
@@ -44,7 +48,9 @@ export default {
         orderSuccess(state) {
             state.loading = false
             state.errors = ""
-            localStorage.removeItem("shoppingCart")
+            let user = localStorage.getItem('user');
+            localStorage.clear();
+            localStorage.setItem('user', user);
             router.push('/thankyou')
         },
         orderFailed(state, payload) {

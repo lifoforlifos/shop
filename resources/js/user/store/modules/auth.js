@@ -12,9 +12,15 @@ export default {
         loading: false,
         auth_error: '',
         register_error: '',
-        active: false
+        active: false,
     },
     getters: {
+        token(state) {
+            if (state.currentUser) {
+                return state.currentUser.token
+            }
+            return
+        },
         authError(state) {
             return state.auth_error
         },
@@ -31,11 +37,8 @@ export default {
     mutations: {
         init(state) {
             state.loading = true
-            state.auth_error = null
-            state.register_error = null
         },
         RegisterFailed(state, payload) {
-            console.log(payload)
             state.loading = false
             state.register_error = payload.response.data.errors
         },
@@ -45,6 +48,10 @@ export default {
             })
             localStorage.setItem('user', JSON.stringify(state.currentUser))
             router.push('/')
+        },
+        logout(state, payload) {
+            state.currentUser = ''
+            localStorage.removeItem("user")
         },
         loginFailed(state, payload) {
             state.loading = false
@@ -81,6 +88,6 @@ export default {
                 .catch((error) => {
                     commit("RegisterFailed", error)
                 })
-        }
+        },
     }
 }

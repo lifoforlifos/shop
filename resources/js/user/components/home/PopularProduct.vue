@@ -17,12 +17,12 @@
                     <div class="product-img">
                         <div v-for="(img, index) in product.images" :key="img.id">
                             <div v-if="index === 0">
-                                <img :src="'https://immense-mesa-40058.herokuapp.com/storage/images_product/' + img.file"
+                                <img :src="'/storage/images_product/' + img.file"
                                     alt="">
                             </div>
                             <!-- Hover Thumb -->
                             <div v-else-if="index === 1">
-                                <img class="hover-img" :src="'https://immense-mesa-40058.herokuapp.com/storage/images_product/' + img.file"
+                                <img class="hover-img" :src="'/storage/images_product/' + img.file"
                                     alt="">
                             </div>
                             <!-- Product Badge -->
@@ -48,25 +48,24 @@
 </template>
 
 <script>
-    export default {
-        name: "popular_product",
-        data() {
-            return {
-                swiperOption: {
-                    slidesPerView: 4,
-                    spaceBetween: 30,
-                    pagination: {
-                        el: ".swiper-pagination",
-                        clickable: true
-                    }
-                }
-            }
-        },
-        computed: {
-            popular_products() {
-                return this.$store.getters.popular_products
-            }
+export default {
+  name: "popular_product",
+  data() {
+    return {
+      swiperOption: {
+        slidesPerView: 4,
+        spaceBetween: 30,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true
         }
+      }
+    };
+  },
+  computed: {
+    popular_products() {
+      return this.$store.getters.popular_products;
     }
-
+  }
+};
 </script>

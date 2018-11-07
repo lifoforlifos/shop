@@ -7,7 +7,7 @@
     <div class="single_product_thumb clearfix">
       <div class="product_thumbnail_slides owl-carousel">
         <swiper :options="swiperOption" v-for="image in product.images" :key="image.id">
-          <swiper-slide> <img :src="`https://immense-mesa-40058.herokuapp.com/storage/images_product/${image.file}`"
+          <swiper-slide> <img :src="`/storage/images_product/${image.file}`"
               alt="">
           </swiper-slide>
           <div class="swiper-button-prev" slot="button-prev"></div>
@@ -44,7 +44,6 @@
   <!-- ##### Single Product Details Area End ##### -->
 </template>
 <script>
-import { addItemToCart, countCart, loadCart } from "../../helpers/cart";
 export default {
   created() {
     if (this.products.length) {
@@ -87,11 +86,7 @@ export default {
     },
     wishlist(id) {
       axios
-        .post("/api/wishlist/" + id, id, {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.auth.currentUser.token}`
-          }
-        })
+        .post("/api/wishlist/" + id, id)
         .then(res => {
           this.$toaster.success(
             "You have successfully added this item in your wishlist"

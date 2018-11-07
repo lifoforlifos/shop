@@ -8,7 +8,7 @@
                 <!-- Single Catagory -->
                 <div class="col-12 col-sm-6 col-md-4" v-for="(category_children, i) in category.children" :key="i">
                     <div v-if="i < 3">
-                        <img :src="`https://immense-mesa-40058.herokuapp.com/storage/category_image/${category_children.image}`"
+                        <img :src="`/storage/category_image/${category_children.image}`"
                             class="justify-content-center" alt="" style="position: absolute;">
                         <div class="single_catagory_area d-flex align-items-center justify-content-center bg-img">
                             <div class="catagory-content">
@@ -24,13 +24,12 @@
 </template>
 
 <script>
-    export default {
-        name: "categories",
-        computed: {
-            categories() {
-                return this.$store.getters.Allcategories
-            }
-        }
+export default {
+  name: "categories",
+  computed: {
+    categories() {
+      return this.$store.getters.Allcategories;
     }
-
+  }
+};
 </script>

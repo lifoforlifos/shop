@@ -39,15 +39,9 @@ export default {
     };
   },
   created() {
-    axios
-      .get("/api/wishlists/", {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.auth.currentUser.token}`
-        }
-      })
-      .then(res => {
-        this.wishlists = res.data.wishlists;
-      });
+    axios.get("/api/wishlists/").then(res => {
+      this.wishlists = res.data.wishlists;
+    });
   }
 };
 </script>

@@ -49,7 +49,6 @@ export default {
             for (var i in cart) {
                 if (cart[i].name === payload) {
                     state.countCart -= cart[i].count
-                    console.log(cart[i].count)
                     cart.splice(i, 1)
                     break;
                 }

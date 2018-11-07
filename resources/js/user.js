@@ -5,7 +5,9 @@ import Toaster from 'v-toaster'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import BootstrapVue from 'bootstrap-vue'
 import store from './user/store/store'
-
+import {
+    response, request
+} from './user/helpers/general'
 // require styles
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -17,6 +19,9 @@ require('./bootstrap')
 Vue.use(BootstrapVue);
 Vue.use(VueAwesomeSwiper)
 Vue.use(Toaster)
+
+response(router, store)
+request(store)
 
 new Vue({
     el: '#user',

@@ -22,7 +22,6 @@ const actions = {
         axios.get('/api/categories')
             .then((response) => {
                 commit('getCategories', response.data.categories)
-                console.log(response)
             })
     }
 }

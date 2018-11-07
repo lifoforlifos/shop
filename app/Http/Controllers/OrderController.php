@@ -42,8 +42,8 @@ class OrderController extends Controller
         $order = new Order();
         $order->random = md5(time());
         $order->status = 'pending';
-        $order->billing_email = 'sg';
-        $order->user_id = '5';
+        $order->billing_email = auth()->guard('api')->user()->email;
+        $order->user_id = auth()->guard('api')->user()->id;
         $order->first_name = $request->first_name;
         $order->last_name = $request->last_name;
         $order->billing_address = $request->street_address;
@@ -65,7 +65,7 @@ class OrderController extends Controller
             ]);
         }
         return response()->json([
-            "stored" => true
+            "stored" => auth()->guard('api')->user()->email
         ]);
     }
 

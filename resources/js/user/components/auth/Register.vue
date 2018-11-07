@@ -11,7 +11,7 @@
             </b-form-input>
             <span class="text-danger" v-if="error.email">{{ error.email[0] }}</span>
         </b-form-group>
-        <b-form-group label="Your Name:" label-for="password">
+        <b-form-group label="Password:" label-for="password">
             <b-form-input id="password" v-model="form.password" type="password" placeholder="Enter password">
             </b-form-input>
             <span class="text-danger" v-if="error.password">{{ error.password[0] }}</span>

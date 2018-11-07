@@ -7,12 +7,12 @@
                 <div class="product-img">
                     <div v-for="(img, index) in product.images" :key="img.id">
                         <div v-if="index === 0">
-                            <img :src="'https://immense-mesa-40058.herokuapp.com/storage/images_product/' + img.file"
+                            <img :src="'/storage/images_product/' + img.file"
                                 alt="">
                         </div>
                         <!-- Hover Thumb -->
                         <div v-else-if="index === 1">
-                            <img class="hover-img" :src="'https://immense-mesa-40058.herokuapp.com/storage/images_product/' + img.file"
+                            <img class="hover-img" :src="'/storage/images_product/' + img.file"
                                 alt="">
                         </div>
                         <!-- Product Badge -->
@@ -21,12 +21,7 @@
                         </div>
                         <!-- Favourite -->
                         <div class="product-favourite">
-                            <template v-if="product.wishlists.length > 0">
-                                <a class="favme fa fa-heart" :class="heartClass(product.wishlists[0].user_id)" @click="wishlist(product.id)"></a>
-                            </template>
-                            <template v-else>
                                 <a class="favme fa fa-heart"  @click="wishlist(product.id)"></a>
-                            </template>
                         </div>
                     </div>
                 </div>
@@ -74,6 +69,7 @@ export default {
         id,
         count: 1
       });
+      this.$toaster.success("You have successfully added " + name);
     },
     heartClass(wishlist_id) {
       return {
@@ -81,13 +77,8 @@ export default {
       };
     },
     wishlist(id) {
-      this.$store.state.auth.currentUser.token;
       axios
-        .post("/api/wishlist/" + id, id, {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.auth.currentUser.token}`
-          }
-        })
+        .post("/api/wishlist/" + id, id)
         .then(res => {
           this.$toaster.success(
             "You have successfully added this item to your wishlist"

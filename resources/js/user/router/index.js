@@ -4,6 +4,8 @@ import store from '../store/store'
 
 // views
 import Home from '../components/home/Home'
+import ConstactUs from '../components/ContactUs'
+import Blog from '../components/blog/Blog'
 import Shop from '../components/store/Shop'
 import Single from '../components/store/Single'
 import Checkout from "../components/checkout/Checkout"
@@ -86,10 +88,20 @@ const router = new VueRouter({
                 forVisitros: true,
                 title: 'Register'
             }
+        },
+        {
+            path: '/contactus',
+            name: 'ConstactUs',
+            component: ConstactUs
+        }, {
+            path: '/blog',
+            name: 'Blog',
+            component: Blog
         }
     ]
 })
 // middleware router
+
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.forVisitros)) {
         if (store.state.auth.currentUser) {
@@ -102,7 +114,7 @@ router.beforeEach((to, from, next) => {
             next({
                 path: '/login'
             })
-        } else if (store.getters.countCart === 0) {
+        } else if (!store.getters.CountCart) {
             next({
                 path: '/'
             })
@@ -112,4 +124,6 @@ router.beforeEach((to, from, next) => {
         document.title = to.meta.title
     next()
 })
+
+
 export default router

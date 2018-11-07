@@ -36,16 +36,9 @@ export default {
     };
   },
   created() {
-    axios
-      .get("/api/auth/profile", {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.auth.currentUser.token}`
-        }
-      })
-      .then(res => {
-        console.log(res);
-        this.orders = res.data.orders;
-      });
+    axios.get("/api/auth/profile").then(res => {
+      this.orders = res.data.orders;
+    });
   }
 };
 </script>
