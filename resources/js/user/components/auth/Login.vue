@@ -10,8 +10,8 @@
         <b-form-input id="password" v-model="form.password" type="password" placeholder="Enter password" >
         </b-form-input>
       </b-form-group>
-      <b-button type="submit" variant="primary" :disabled="loading">Submit</b-button>
-      <b-button type="reset" variant="danger">Reset</b-button>
+      <button type="submit" class="btn btn-primary" :disabled="loading">Submit</button>
+      <button type="reset" class="btn btn-danger">Reset</button>
     </b-form>
 </template>
 <script>

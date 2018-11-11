@@ -19,8 +19,12 @@ const actions = {
     getCategories({
         commit
     }) {
-        axios.get('/api/categories')
-            .then((response) => {
+        axios.get('/api/categories', {
+                params: {
+                    pagination: false
+                }
+            })
+            .then(response => {
                 commit('getCategories', response.data.categories)
             })
     }

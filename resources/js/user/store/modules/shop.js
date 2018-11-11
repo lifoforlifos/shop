@@ -63,7 +63,7 @@ export default {
                     }
 
                 })
-                .then((response) => {
+                .then(response => {
                     commit("getProducts", response)
                 })
         }

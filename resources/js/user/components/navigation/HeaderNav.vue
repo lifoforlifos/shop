@@ -22,6 +22,11 @@
                                 <router-link to="/profile"><img class="user" src="/images/user.svg" alt=""></router-link>
                             </div>
                         </b-nav-item>
+                        <b-nav-item href="#">
+                            <div class="user-login-info">
+                                <a @click="logout()">Logout</a>
+                            </div>
+                        </b-nav-item>
                     </template>
                     <b-nav-item>
                         <div class="cart-area" v-b-modal.ConfiShop id="essenceCartBtn">
@@ -94,6 +99,13 @@ export default {
       return this.$store.getters.carts;
     },
     currentUser() {
+      if (this.$store.getters.currentUser) {
+        let expiration = this.$store.getters.currentUser.expires_in || 0;
+        if (Date.now() > parseInt(expiration)) {
+          this.logout();
+          return;
+        }
+      }
       return this.$store.getters.currentUser;
     },
     count() {
@@ -101,6 +113,9 @@ export default {
     }
   },
   methods: {
+    logout() {
+      this.$store.commit("logout");
+    },
     activeMega() {
       this.$store.commit("activeMega");
     },

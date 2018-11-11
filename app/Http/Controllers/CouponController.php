@@ -8,6 +8,10 @@ use App\Http\Requests\CouponRequest;
 
 class CouponController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api-admin', ['except' => 'check']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,10 +19,10 @@ class CouponController extends Controller
      */
     public function index()
     {
-        $coupon = Coupon::paginate(20);
+        $coupons = Coupon::paginate(20);
 
         return response()->json([
-            'coupon' => $coupon
+            'coupons' => $coupons
         ], 200);
     }
 
@@ -62,14 +66,14 @@ class CouponController extends Controller
      */
     public function update(CouponRequest $request, $id)
     {
-
         $coupon = Coupon::findOrFail($id);
         $coupon->coupon = $request->coupon;
         $coupon->value = $request->value;
         $coupon->save();
 
         return response()->json([
-            'updated' => true
+            'updated' => true,
+            'id' => $request->all()
         ], 200);
     }
 

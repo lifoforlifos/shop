@@ -2,84 +2,80 @@
 
 namespace App\Http\Controllers;
 
-use App\Admin;
 use Illuminate\Http\Request;
+use Auth;
 
 class AdminController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Create a new AuthController instance.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->middleware('auth:api-admin', ['except' => ['login']]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Get a JWT via given credentials.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function create()
+    public function login()
     {
-        //
+        $credentials = request(['email', 'password']);
+
+        if (!$token = auth('api-admin')->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->respondWithToken($token);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Log the user out (Invalidate the token).
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function logout()
     {
-        //
+        auth('api-admin')->logout();
+
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
     }
 
     /**
-     * Display the specified resource.
+     * Refresh a token.
      *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Admin $admin)
+    public function refresh()
     {
-        //
+        return $this->respondWithToken(auth()->refresh());
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Get the token array structure.
      *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function edit(Admin $admin)
+    protected function respondWithToken($token)
     {
-        //
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'admin' => $this->guard()->user(),
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Admin $admin)
+    public function guard()
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Admin $admin)
-    {
-        //
+        return Auth::Guard('api-admin');
     }
 }

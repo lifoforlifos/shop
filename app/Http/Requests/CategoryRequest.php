@@ -27,9 +27,9 @@ class CategoryRequest extends FormRequest
         switch ($request->method()) {
             case ('POST'):
                 return [
+                    'image' => 'required|image',
                     'name' => 'required',
-                    'slug' => 'required',
-                    'image' => 'required'
+                    'slug' => 'required'
                 ];
             case ('PUT'):
                 return [

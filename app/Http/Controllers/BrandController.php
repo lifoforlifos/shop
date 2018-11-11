@@ -9,6 +9,10 @@ use App\Brand;
 
 class BrandController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api-admin', ['except' => 'index']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,10 +20,14 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brand = Brand::paginate('10');
+        if (request()->pagination != false) {
+            $brands = Brand::all();
+        } else {
+            $brands = Brand::paginate('10');
+        }
         return response()
             ->json([
-                "brand" => $brand
+                "brands" => $brands
             ], 200);
     }
 
@@ -99,7 +107,7 @@ class BrandController extends Controller
         $brand->delete();
 
         return response()->json([
-            'deleted' => true
+            'deleted' => true,
         ], 200);
     }
 }

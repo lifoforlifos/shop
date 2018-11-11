@@ -24,7 +24,7 @@ export default {
             commit
         }) {
             axios.get("/api/product/landingpage")
-                .then((response) => {
+                .then(response => {
                     commit("getContent", response)
                 })
         }

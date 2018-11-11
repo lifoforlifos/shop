@@ -43,17 +43,18 @@ export default {
             state.register_error = payload.response.data.errors
         },
         login_register_Success(state, payload) {
-            state.currentUser = Object.assign({}, payload.user, {
-                token: payload.access_token
-            })
+            state.currentUser = {
+                ...payload.user,
+                token: payload.access_token,
+                expires_in: Date.now() + payload.expires_in
+            }
             localStorage.setItem('user', JSON.stringify(state.currentUser))
             router.push('/')
         },
-        logout(state, payload) {
-            state.currentUser = ''
+        logout() {
             localStorage.removeItem("user")
         },
-        loginFailed(state, payload) {
+        loginFailed(state) {
             state.loading = false
             state.auth_error = "Incorrect information! please try again"
         },
@@ -71,10 +72,10 @@ export default {
             commit
         }, payload) {
             axios.post('/api/auth/login', payload)
-                .then((response) => {
+                .then(response => {
                     commit("login_register_Success", response.data);
                 })
-                .catch((error) => {
+                .catch(error => {
                     commit("loginFailed", error);
                 })
         },
@@ -82,10 +83,10 @@ export default {
             commit
         }, payload) {
             axios.post('api/auth/register', payload)
-                .then((response) => {
+                .then(response => {
                     commit("login_register_Success", response.data)
                 })
-                .catch((error) => {
+                .catch(error => {
                     commit("RegisterFailed", error)
                 })
         },

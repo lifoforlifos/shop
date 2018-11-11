@@ -41,7 +41,7 @@
                   <div class="product-topbar d-flex align-items-center justify-content-between">
                     <!-- Total Products -->
                     <div class="total-products">
-                      <p><span></span> products found</p>
+                      <p>products found <span>{{ $store.state.shop.pagination.total }}</span>  </p>
                     </div>
                     <app-sort-by></app-sort-by>
                   </div>

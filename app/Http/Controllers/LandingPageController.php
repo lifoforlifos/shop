@@ -79,15 +79,13 @@ class LandingPageController extends Controller
                 }
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(40);
+            ->paginate(20);
 
         return response()
             ->json([
                 'products' => $products,
                 'brands' => array_unique($brands),
                 'categories' => array_unique($categories),
-                'all' => request()->all()
-
             ]);
 
     }

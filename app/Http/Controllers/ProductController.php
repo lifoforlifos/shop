@@ -5,11 +5,16 @@ namespace App\Http\Controllers;
 use App\Image;
 use App\Product;
 use App\Category;
+use File;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api-admin', ['except' => 'index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -32,22 +37,18 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        //perecentage off
         $percentage_off = isset($request->old_price) ? ((($request->old_price - $request->price) / $request->old_price) * 100) : 0;
-        //save post
         $product = new Product($request->except('percentage_off', 'slug', 'category_id', 'brand_id', 'images'));
         $product->slug = str_replace(' ', '-', $request->slug);
         $product->percentage_off = $percentage_off;
         $product->save();
 
-        //save images
         $this->imageSave($product->id, $request);
-        //save brands and categories
-        $this->brandCat($product, $request);
+        $this->brandCat($product, $request, "store");
 
         return response()
             ->json([
-                'save' => 'true'
+                'save' => true
             ], 200);
     }
     /**
@@ -58,11 +59,12 @@ class ProductController extends Controller
 
     private function imageSave($product_id, $request)
     {
-
         if (!empty($request->file('images'))) {
             foreach ($request->file('images') as $image) {
-                $filename = $request->image->getClientOriginalName();
-                $request->image->move('storage/images_product/', $filename);
+
+                $filename = $image->getClientOriginalName();
+                $image->move('storage/images_product/', $filename);
+
                 $images = new Image();
                 $images->file = $name;
                 $images->product_id = $product_id;
@@ -77,16 +79,33 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private function brandCat($product, $request)
+    private function brandCat($product, $request, $method)
     {
-        //save brand
-        $product->brands()->attach($request->brand_id);
-        //save category
         $category_id = $request->category_id;
         $category_parent = Category::whereHas('children', function ($query) use ($category_id) {
             $query->where('id', $category_id);
         })->first();
-        $product->categories()->attach($category_id, ['parent_id' => !empty($category_parent->id) ? $category_parent->id : null]);
+
+        if ($method === "update") {
+            $product->brands()
+                ->updateExistingPivot($product->brands[0]->id, [
+                    'brand_id' => $request->brand_id
+                ]);
+
+            $product->categories()
+                ->updateExistingPivot($product->categories[0]->id, [
+                    'category_id' => $category_id,
+                    'parent_id' => !empty($category_parent->id) ? $category_parent->id : null
+                ]);
+        } else {
+            $product->brands()
+                ->attach($request->brand_id);
+
+            $product->categories()
+                ->attach($category_id, [
+                    'parent_id' => !empty($category_parent->id) ? $category_parent->id : null
+                ]);
+        }
     }
 
     /**
@@ -97,7 +116,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('images', "brands")
+        $product = Product::with("categories", "images", "brands")
             ->findOrFail($id);
 
         return response()->json([
@@ -114,9 +133,7 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $id)
     {
-        //perecentage off
         $percentage_off = isset($request->old_price) ? ((($request->old_price - $request->price) / $request->old_price) * 100) : 0;
-
         $product = Product::findorFail($id);
         $product->name = $request->name;
         $product->description = $request->description;
@@ -125,10 +142,8 @@ class ProductController extends Controller
         $product->percentage_off = $percentage_off;
         $product->save();
 
-        //save images
         $this->imageSave($product->id, $request);
-        //save brands and categories
-        $this->brandCat($product, $request);
+        $this->brandCat($product, $request, "update");
 
         return response()->json([
             'updated' => true

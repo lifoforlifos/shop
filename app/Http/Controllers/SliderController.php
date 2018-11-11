@@ -9,6 +9,10 @@ use App\Http\Requests\SliderRequest;
 
 class SliderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api-admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -73,7 +77,7 @@ class SliderController extends Controller
         $slider = Slider::findOrFail($id);
         $slider->paragraph = $request->paragraph;
         $slider->headline = $request->headline;
-        $slider->category_slug = $request->category_radio;
+        $slider->category_slug = $request->category_slug;
         $slider->save();
 
         return response()->json([

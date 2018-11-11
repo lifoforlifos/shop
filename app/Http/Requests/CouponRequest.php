@@ -25,7 +25,7 @@ class CouponRequest extends FormRequest
     public function rules(Request $request)
     {
         return [
-            'coupon' => 'required|unique:coupons|max:255',
+            'coupon' => 'required|unique:coupons,coupon,' . $this->request->get('id'),
             'value' => 'required|integer|max:255'
         ];
     }

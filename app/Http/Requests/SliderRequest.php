@@ -36,7 +36,7 @@ class SliderRequest extends FormRequest
                 return [
                     'paragraph' => 'required',
                     'headline' => 'required',
-                    'category_slug' => 'required'
+                    'category_slug' => 'required',
                 ];
         }
 

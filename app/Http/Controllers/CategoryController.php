@@ -9,6 +9,11 @@ use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api-admin', ['except' => 'index']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,11 +21,17 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::tree();
-
+        if (request()->pagination) {
+            $categories = Category::tree();
+        } else {
+            $categories = Category::with('children')
+                ->paginate(10);
+        }
         return response()
             ->json([
-                'categories' => $categories
+                'categories' => $categories,
+
+                "request" => request()->pagination
             ]);
     }
 
@@ -33,7 +44,6 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        //store multiple images
         $image = $request->file('image');
         $name = $image->getClientOriginalName();
         $image->move('storage/category_image/', $name);

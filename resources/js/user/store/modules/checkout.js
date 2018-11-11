@@ -72,9 +72,9 @@ export default {
                 params: {
                     coupon
                 }
-            }).then((response) => {
+            }).then(response => {
                 commit("couponSuccess", response)
-            }).catch((error) => {
+            }).catch(error => {
                 commit("couponFaild", error)
             })
         },
@@ -84,7 +84,7 @@ export default {
         }, payload) {
             axios
                 .post("/api/orders", payload)
-                .then(response => {
+                .then(() => {
                     rootState.cart.cart = []
                     commit("orderSuccess");
                 })

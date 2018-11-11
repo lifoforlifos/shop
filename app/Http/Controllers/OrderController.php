@@ -10,6 +10,12 @@ use App\Http\Requests\OrderRequest;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['only' => 'store']);
+        //$this->middleware('auth:api-admin', ['only' => 'store']);
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,15 +26,6 @@ class OrderController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -42,8 +39,8 @@ class OrderController extends Controller
         $order = new Order();
         $order->random = md5(time());
         $order->status = 'pending';
-        $order->billing_email = auth()->guard('api')->user()->email;
-        $order->user_id = auth()->guard('api')->user()->id;
+        $order->billing_email = auth('api')->user()->email;
+        $order->user_id = auth('api')->user()->id;
         $order->first_name = $request->first_name;
         $order->last_name = $request->last_name;
         $order->billing_address = $request->street_address;
@@ -65,7 +62,7 @@ class OrderController extends Controller
             ]);
         }
         return response()->json([
-            "stored" => auth()->guard('api')->user()->email
+            "saved" => true
         ]);
     }
 

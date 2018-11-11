@@ -4,12 +4,22 @@
 Route::group([
     'prefix' => 'auth'
 ], function ($router) {
-
     Route::post('login', 'UserController@login');
     Route::post('register', 'UserController@register');
     Route::post('logout', 'UserController@logout');
     Route::post('refresh', 'UserController@refresh');
     Route::get('/profile', 'UserController@profile');
+});
+
+Route::group([
+    'prefix' => 'admin'
+], function ($router) {
+
+    Route::post('login', 'AdminController@login');
+    Route::post('register', 'AdminController@register');
+    Route::post('logout', 'AdminController@logout');
+    Route::post('refresh', 'AdminController@refresh');
+    Route::get('/profile', 'AdminController@profile');
 
 });
 

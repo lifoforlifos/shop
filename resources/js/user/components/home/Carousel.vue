@@ -8,9 +8,8 @@
                 <div class="slider-content">
                     <h5>{{ slider.headline }}</h5>
                     <p>{{ slider.paragraph }}</p>
-                    <b-button variant="primary">Shop Now</b-button>
+                    <button class="btn essence-btn">Shop Now</button>
                 </div>
-
             </router-link>
         </b-carousel-slide>
     </b-carousel>
