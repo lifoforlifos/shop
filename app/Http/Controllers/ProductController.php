@@ -13,7 +13,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api-admin', ['except' => 'index', 'show']);
+        $this->middleware('auth:api-admin', ['only' => 'store', 'update', 'destroy']);
     }
     /**
      * Display a listing of the resource.
@@ -120,6 +120,7 @@ class ProductController extends Controller
             ->findOrFail($id);
 
         return response()->json([
+            'currency_info' => currency_changer(),
             'product' => $product,
         ]);
     }

@@ -1,3 +1,4 @@
+//constructor
 let Item = function (name, price, img, id, count) {
     this.name = name
     this.price = price
@@ -33,7 +34,7 @@ export default {
     mutations: {
         addToCart(state, payload) {
             const carts = state.cart
-            for (var i in carts) {
+            for (let i in carts) {
                 if (carts[i].name === payload.name) {
                     carts[i].count += payload.count;
                     localStorage.setItem("shoppingCart", JSON.stringify(carts))

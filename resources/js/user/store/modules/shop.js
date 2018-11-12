@@ -5,6 +5,7 @@ export default {
         products: [],
         categories: [],
         brands: [],
+        currency_info: "",
         pagination: "",
         selected: "",
         brand_name: "",
@@ -22,6 +23,9 @@ export default {
         },
         pagination(state) {
             return state.pagination
+        },
+        currency_info(state) {
+            return state.currency_info
         }
     },
     mutations: {
@@ -35,6 +39,7 @@ export default {
             state.categories = payload.data.categories
             state.brands = payload.data.brands
             state.products = payload.data.products.data
+            state.currency_info = payload.data.currency_info;
             state.pagination = {
                 current_page: payload.data.products.current_page,
                 last_page: payload.data.products.last_page,

@@ -2,7 +2,7 @@ import axios from "axios"
 import router from '../../router/index'
 export default {
     state: {
-        currentAdmin: localStorage.getItem("currentAdmin") || "",
+        currentAdmin: JSON.parse(localStorage.getItem("currentAdmin")) || "",
         error_admin: "",
     },
     getters: {
@@ -29,14 +29,15 @@ export default {
         },
     },
     actions: {
-        login({ commit }, payload) {
+        login({
+            commit
+        }, payload) {
             axios
                 .post("/api/admin/login", payload)
                 .then(res => {
                     commit("loginSuccess", res)
                 })
                 .catch(error => {
-                    console.log(error)
                     commit("loginFailed", error)
                 });
         }

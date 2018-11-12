@@ -22,7 +22,7 @@ class LandingPageController extends Controller
 
         return response()
             ->json([
-               // 'currency_info' => currency_changer(),
+                'currency_info' => currency_changer(),
                 'popular_products' => $popular_products,
                 'sliders' => $sliders
             ]);
@@ -83,6 +83,7 @@ class LandingPageController extends Controller
 
         return response()
             ->json([
+                'currency_info' => currency_changer(),
                 'products' => $products,
                 'brands' => array_unique($brands),
                 'categories' => array_unique($categories),

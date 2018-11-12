@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import { del ,get } from "../../helpers/api";
-
 export default {
   data() {
     return {
@@ -42,8 +40,8 @@ export default {
     };
   },
   created() {
-    get("/api/orders/all").then(res => {
-      this.orders = res.data;
+    axios.get("/api/orders").then(res => {
+      this.orders = res.data.orders;
     });
   }
 };

@@ -7,25 +7,17 @@ use App\OrderProduct;
 use Illuminate\Http\Request;
 use Auth;
 use App\Http\Requests\OrderRequest;
+use App\Mail\OrderPlaced;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth:api', ['only' => 'store']);
-        //$this->middleware('auth:api-admin', ['only' => 'store']);
+        //$this->middleware('auth:api-admin', ['only' => 'store', 'index']);
 
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
 
     /**
      * Store a newly created resource in storage.
@@ -69,45 +61,51 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Order  $order
+     * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show($id)
     {
+        $order = Order::with('products.images')
+            ->findOrFail($id);
 
+        return response()->json([
+            'order' => $order
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display a listing of the resource.
      *
-     * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function edit(Order $order)
+    public function update(Request $request)
     {
-        //
+        if (!empty($request->status)) {
+            $order = Order::where('id', $request->id)->update(['status' => $request->status]);
+            //Mail::send(new OrderPlaced($order, $request->status));
+
+            return response()->json([
+                'success' => true,
+                'order' => $order
+            ], 200);
+        }
+        return response()->json([
+            'errors' => $request->all()
+        ], 422);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
+    public function status($status = 0)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Order $order)
-    {
-        //
+        $order = Order::where('status', $status)
+            ->get();
+        return response()->json([
+            'order' => $order
+        ], 200);
     }
 }

@@ -44,15 +44,18 @@
   <!-- ##### Single Product Details Area End ##### -->
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   created() {
     if (this.products.length) {
       this.product = this.products.find(
         product => product.id == this.$route.params.id
       );
+      this.currency_info = this.$store.state.shop.currency_info;
     } else {
       axios.get(`/api/products/${this.$route.params.id}`).then(response => {
         this.product = response.data.product;
+        this.currency_info = response.data.currency_info;
       });
     }
   },
@@ -69,9 +72,7 @@ export default {
     };
   },
   computed: {
-    products() {
-      return this.$store.getters.products;
-    }
+    ...mapGetters(["products"])
   },
   methods: {
     addToCart(name, price, img, id) {
@@ -93,7 +94,8 @@ export default {
           );
         })
         .catch(err => {
-          this.$toaster.error("This item is already in your wishlist");
+          if (err.response.status === 422)
+            this.$toaster.error("This item is already in your wishlist");
         });
     }
   }

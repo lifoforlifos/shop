@@ -5,7 +5,7 @@
         <span class="order_style"><b>last name</b>: {{ order.last_name }}</span>
         <span class="order_style"><b>billing address</b>: {{ order.billing_address }}</span>
         <span class="order_style"><b>billing city</b>: {{ order.billing_city }}</span>
-        <span class="order_style"><b>billing postalcode</b>: {{ order.billing_postalcode }}</span>
+        <span class="order_style"><b>billing productalcode</b>: {{ order.billing_productalcode }}</span>
         <span class="order_style"><b>billing phone</b>: {{ order.billing_phone }}</span>
         <span class="order_style"><b>billing discount</b>: {{ order.billing_discount }}</span>
         <span class="order_style"><b>billing discount_code</b>: {{ order.billing_discount_code }}</span>
@@ -34,16 +34,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="post in order.posts" :key="post.id">
+                            <tr v-for="product in order.products" :key="product.id">
                                 <td>
-                                    <router-link class="recipe__inner" :to="`/posts/${post.id}`">
-                                        <img :src="'/images_product/' + post.images[0].file" alt="" class="img-fluids">
+                                    <router-link class="recipe__inner" :to="`/products/${product.id}`">
+                                        <img :src="'/images_product/' + product.images[0].file" alt="" class="img-fluids">
                                     </router-link>
                                 </td>
-                                <td>{{ post.name }}</td>
-                                <td>{{ post.price }}</td>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.price }}</td>
                                 <td>
-                                    <span class="badge badge-success">{{ post.pivot.quantity }}</span>
+                                    <span class="badge badge-success">{{ product.pivot.quantity }}</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -57,8 +57,6 @@
     </div>
 </template>
 <script>
-import { post, get } from "../../helpers/api";
-
 export default {
   data() {
     return {
@@ -67,18 +65,19 @@ export default {
     };
   },
   created() {
-    get(`/api/orders/edit/${this.$route.params.id}`).then(res => {
-      this.order = res.data;
+    axios.get(`/api/orders/${this.$route.params.id}`).then(res => {
+      this.order = res.data.order;
     });
   },
   methods: {
     updateStatus(id) {
-      post("/api/orders/update", {
-        status: this.status,
-        id: id
-      })
+      axios
+        .put(`/api/orders/${id}`, {
+          status: this.status,
+          id: id
+        })
         .then(res => {
-          this.$router.push("/orders/edit-order");
+          this.$router.push("/orders/");
         })
         .catch(res => {});
     }

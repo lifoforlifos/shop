@@ -48,6 +48,12 @@ Route::get('/wishlists', [
     'as' => 'user.wishlist.get'
 ]);
 
+//order
+Route::get('order/status/{status?}', [
+    'uses' => 'OrderController@status',
+    'as' => 'order.get.status'
+]);
+
 Route::apiResources([
     'products' => 'ProductController',
     'categories' => 'CategoryController',

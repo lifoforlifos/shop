@@ -31,7 +31,11 @@
                     <router-link :to="`/shop/single-product/${product.id}`">
                         <h6>{{ product.name }}</h6>
                     </router-link>
-
+                      <p class="product-price"><span class="old-price">{{
+                          currency_info.currency
+                          }} {{ (product.old_price * currency_info.rate).toFixed(0)}}</span> {{
+                        currency_info.currency
+                        }} {{ (product.price * currency_info.rate).toFixed(0)}}</p> <!-- Hover Content -->
                     <div class="hover-content">
                         <!-- Add to Cart -->
                         <div class="add-to-cart-btn">
@@ -47,13 +51,11 @@
 
 </template>
 <script>
-import axios from "axios";
+import { mapGetters } from "vuex";
 export default {
   name: "products",
   computed: {
-    products() {
-      return this.$store.getters.products;
-    }
+    ...mapGetters(["products", "currency_info"])
   },
   data() {
     return {
@@ -85,7 +87,8 @@ export default {
           );
         })
         .catch(err => {
-          this.$toaster.error("This item is already in your wishlist");
+          if (err.response.status === 422)
+            this.$toaster.error("This item is already in your wishlist");
         });
     }
   }

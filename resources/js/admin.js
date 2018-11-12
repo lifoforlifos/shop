@@ -4,7 +4,8 @@ import App from './admin/App.vue'
 import router from './admin/router'
 import store from './admin/store/store'
 import {
-  response, request
+    response,
+    request
 } from './admin/helpers/general'
 require('./bootstrap')
 Vue.use(BootstrapVue)
@@ -15,11 +16,11 @@ request(store)
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: {
-    App
-  }
+    el: '#app',
+    router,
+    store,
+    template: '<App/>',
+    components: {
+        App
+    }
 })
