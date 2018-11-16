@@ -11,7 +11,7 @@ import Single from '../components/store/Single'
 import Checkout from "../components/checkout/Checkout"
 // User
 import Profile from '../components/auth/Profile'
-import Wishlist from '../components/auth/Wishlist'
+import Wishlist from '../components/auth/WishList'
 import Login from '../components/auth/Login'
 import Register from '../components/auth/Register'
 

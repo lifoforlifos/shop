@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Brand;
 use App\Slider;
-use App\product;
+use App\Product;
 use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
